@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.ChongwuDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.chongwu_name as chongwuName
+        ,a.chongwu_types as chongwuTypes
+        ,a.chongwu_sex_types as chongwuSexTypes
+        ,a.chongwu_age as chongwuAge
+        ,a.chongwu_huase as chongwuHuase
+        ,a.chongwu_jiankang_types as chongwuJiankangTypes
+        ,a.chongwu_suozaidi as chongwuSuozaidi
+        ,a.chongwu_lingyangyaoqiu as chongwuLingyangyaoqiu
+        ,a.chongwu_lianxifangshi as chongwuLianxifangshi
+        ,a.chongwu_photo as chongwuPhoto
+        ,a.chongwu_content as chongwuContent
+        ,a.chongwu_yesno_types as chongwuYesnoTypes
+        ,a.yonghu_id as yonghuId
+        ,a.create_time as createTime
+    </sql>
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.ChongwuView" >
+        SELECT
+        <include refid="Base_Column_List" />
+
+--         级联表的字段
+        ,yonghu.yonghu_name as yonghuName
+        ,yonghu.yonghu_sex_types as yonghuSexTypes
+        ,yonghu.yonghu_age as yonghuAge
+        ,yonghu.yonghu_photo as yonghuPhoto
+        ,yonghu.yonghu_gongzuo as yonghuGongzuo
+        ,yonghu.yonghu_jine as yonghuJine
+        ,yonghu.yonghu_address as yonghuAddress
+        ,yonghu.yonghu_phone as yonghuPhone
+        ,yonghu.yonghu_id_number as yonghuIdNumber
+        ,yonghu.yonghu_aihao as yonghuAihao
+        ,yonghu.yonghu_yesno_types as yonghuYesnoTypes
+
+        FROM chongwu  a
+        left JOIN yonghu yonghu ON a.yonghu_id = yonghu.id
+
+        <where>
+            <if test=" params.chongwuName != '' and params.chongwuName != null and params.chongwuName != 'null' ">
+                and a.chongwu_name like CONCAT('%',#{params.chongwuName},'%')
+            </if>
+            <if test="params.chongwuTypes != null">
+                and a.chongwu_types = #{params.chongwuTypes}
+            </if>
+            <if test="params.chongwuSexTypes != null">
+                and a.chongwu_sex_types = #{params.chongwuSexTypes}
+            </if>
+            <if test=" params.chongwuAge != '' and params.chongwuAge != null and params.chongwuAge != 'null' ">
+                and a.chongwu_age like CONCAT('%',#{params.chongwuAge},'%')
+            </if>
+            <if test=" params.chongwuHuase != '' and params.chongwuHuase != null and params.chongwuHuase != 'null' ">
+                and a.chongwu_huase like CONCAT('%',#{params.chongwuHuase},'%')
+            </if>
+            <if test="params.chongwuJiankangTypes != null">
+                and a.chongwu_jiankang_types = #{params.chongwuJiankangTypes}
+            </if>
+            <if test=" params.chongwuSuozaidi != '' and params.chongwuSuozaidi != null and params.chongwuSuozaidi != 'null' ">
+                and a.chongwu_suozaidi like CONCAT('%',#{params.chongwuSuozaidi},'%')
+            </if>
+            <if test=" params.chongwuLingyangyaoqiu != '' and params.chongwuLingyangyaoqiu != null and params.chongwuLingyangyaoqiu != 'null' ">
+                and a.chongwu_lingyangyaoqiu like CONCAT('%',#{params.chongwuLingyangyaoqiu},'%')
+            </if>
+            <if test=" params.chongwuLianxifangshi != '' and params.chongwuLianxifangshi != null and params.chongwuLianxifangshi != 'null' ">
+                and a.chongwu_lianxifangshi like CONCAT('%',#{params.chongwuLianxifangshi},'%')
+            </if>
+            <if test=" params.chongwuContent != '' and params.chongwuContent != null and params.chongwuContent != 'null' ">
+                and a.chongwu_content like CONCAT('%',#{params.chongwuContent},'%')
+            </if>
+            <if test="params.chongwuYesnoTypes != null">
+                and a.chongwu_yesno_types = #{params.chongwuYesnoTypes}
+            </if>
+            <if test="params.yonghuId != null">
+                and a.yonghu_id = #{params.yonghuId}
+            </if>
+
+            <if test=" params.yonghuName != '' and params.yonghuName != null and params.yonghuName != 'null' ">
+                and yonghu.yonghu_name like CONCAT('%',#{params.yonghuName},'%')
+            </if>
+            <if test="params.yonghuSexTypes != null">
+                and yonghu.yonghu_sex_types = #{params.yonghuSexTypes}
+            </if>
+
+            <if test="params.yonghuAgeStart != null ">
+                <![CDATA[  and yonghu.yonghu_age >= #{params.yonghuAgeStart}   ]]>
+            </if>
+            <if test="params.yonghuAgeEnd != null ">
+                <![CDATA[  and yonghu.yonghu_age <= #{params.yonghuAgeEnd}   ]]>
+            </if>
+            <if test=" params.yonghuGongzuo != '' and params.yonghuGongzuo != null and params.yonghuGongzuo != 'null' ">
+                and yonghu.yonghu_gongzuo like CONCAT('%',#{params.yonghuGongzuo},'%')
+            </if>
+            <if test="params.yonghuJineStart != null ">
+                <![CDATA[  and yonghu.yonghu_jine >= #{params.yonghuJineStart}   ]]>
+            </if>
+            <if test="params.yonghuJineEnd != null ">
+                <![CDATA[  and yonghu.yonghu_jine <= #{params.yonghuJineEnd}   ]]>
+            </if>
+            <if test=" params.yonghuAddress != '' and params.yonghuAddress != null and params.yonghuAddress != 'null' ">
+                and yonghu.yonghu_address like CONCAT('%',#{params.yonghuAddress},'%')
+            </if>
+            <if test=" params.yonghuPhone != '' and params.yonghuPhone != null and params.yonghuPhone != 'null' ">
+                and yonghu.yonghu_phone like CONCAT('%',#{params.yonghuPhone},'%')
+            </if>
+            <if test=" params.yonghuIdNumber != '' and params.yonghuIdNumber != null and params.yonghuIdNumber != 'null' ">
+                and yonghu.yonghu_id_number like CONCAT('%',#{params.yonghuIdNumber},'%')
+            </if>
+            <if test=" params.yonghuAihao != '' and params.yonghuAihao != null and params.yonghuAihao != 'null' ">
+                and yonghu.yonghu_aihao like CONCAT('%',#{params.yonghuAihao},'%')
+            </if>
+            <if test="params.yonghuYesnoTypes != null">
+                and yonghu.yonghu_yesno_types = #{params.yonghuYesnoTypes}
+            </if>
+
+        </where>
+        order by a.${params.orderBy} desc
+    </select>
+
+</mapper>
